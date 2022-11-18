@@ -1,78 +1,54 @@
 export default function Stories() {
+
+    const storiesInfo = [
+        {
+            image: 'assets/img/9gag.svg',
+            userName: '9gag'
+        },
+        {
+            image: 'assets/img/meowed.svg',
+            userName: 'meowed'
+        },
+        {
+            image: 'assets/img/barked.svg',
+            userName: 'barked'
+        },
+        {
+            image: 'assets/img/nathanwpylestrangeplanet.svg',
+            userName: 'nathanwpylestrangeplanet'
+        },
+        {
+            image: 'assets/img/wawawicomics.svg',
+            userName: 'wawawicomics'
+        },
+        {
+            image: 'assets/img/respondeai.svg',
+            userName: 'respondeai'
+        },
+        {
+            image: 'assets/img/filomoderna.svg',
+            userName: 'filomoderna'
+        },
+        {
+            image: 'assets/img/memeriagourmet.svg',
+            userName: 'memeriagourmet'
+        }
+    ]
+
     return(
-        <div class="stories">
-            <div class="story">
-                <div class="imagem">
-                    <img src="assets/img/9gag.svg" />
-                </div>
-                <div class="usuario">
-                    9gag
-                </div>
-            </div>
-
-            <div class="story">
-                <div class="imagem">
-                    <img src="assets/img/meowed.svg" />
-                </div>
-                <div class="usuario">
-                    meowed
-                </div>
-            </div>
-
-            <div class="story">
-                <div class="imagem">
-                    <img src="assets/img/barked.svg" />
-                </div>
-                <div class="usuario">
-                    barked
-                </div>
-            </div>
-
-            <div class="story">
-                <div class="imagem">
-                    <img src="assets/img/nathanwpylestrangeplanet.svg" />
-                </div>
-                <div class="usuario">
-                    nathanwpylestrangeplanet
-                </div>
-            </div>
-
-            <div class="story">
-                <div class="imagem">
-                    <img src="assets/img/wawawicomics.svg" />
-                </div>
-                <div class="usuario">
-                    wawawicomics
-                </div>
-            </div>
-
-            <div class="story">
-                <div class="imagem">
-                    <img src="assets/img/respondeai.svg" />
-                </div>
-                <div class="usuario">
-                    respondeai
-                </div>
-            </div>
-
-            <div class="story">
-                <div class="imagem">
-                    <img src="assets/img/filomoderna.svg" />
-                </div>
-                <div class="usuario">
-                    filomoderna
-                </div>
-            </div>
-
-            <div class="story">
-                <div class="imagem">
-                    <img src="assets/img/memeriagourmet.svg" />
-                </div>
-                <div class="usuario">
-                    memeriagourmet
-                </div>
-            </div>
-
+        <div class="stories">            
+            {storiesInfo.map(storie => {
+                return(
+                    <div class="story">
+                        <div class="imagem">
+                            <img src={storie.image}/>
+                        </div>
+                        <div class="usuario">
+                            {storie.userName}  
+                        </div>
+                    </div>
+                )
+            })}
             <div class="setinha">
                 <ion-icon name="chevron-forward-circle"></ion-icon>
             </div>
