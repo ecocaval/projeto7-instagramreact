@@ -37,37 +37,61 @@ export default function Posts() {
     
     function Post(props) {
 
+        const [likesAmount, setLikesAmount] = React.useState(props.likesAmount);
         const [bookMark, setBookMark] = React.useState("bookmark-outline");
 
         function changeBookMark(bookMark) {
             !(bookMark === "bookmark") ? setBookMark("bookmark") : setBookMark("bookmark-outline")
         }
 
-        function likePost(event) {
+        function likeDislikePost(event) {
+
             const postHeart = event.currentTarget.offsetParent.firstChild;
-            let postIsLiked = false;
             
+            let postIsLiked = false;
+
+            // changes the post heart burtton to filled and red
+            const likePost = (heartIcon) => {
+                heartIcon.name = 'heart';
+                heartIcon.style.color = 'red';
+            }
+            // changes the post heart burtton to unfilled and black
+            const dislikePost = (heartIcon) => {
+                heartIcon.name = 'heart-outline';
+                heartIcon.style.color = null;
+            }
+            
+            // case #1 - like triggered through post image
             if(event.currentTarget.classList.contains('conteudo')) {
                 const heartIconHTML = event.currentTarget.offsetParent.childNodes[3].firstChild.firstChild.firstChild;
-                heartIconHTML.name = 'heart';
-                heartIconHTML.style.color = 'red';
+                likePost(heartIconHTML);
             } else {
+            // case #2 - like triggered through like button                
                 const heartIconHTML = event.currentTarget;
-                if(heartIconHTML.name !== 'heart') {
-                    heartIconHTML.name = 'heart';
-                    heartIconHTML.style.color = 'red';
+                postIsLiked = heartIconHTML.name === 'heart';
+                if(!postIsLiked) {
+                    likePost(heartIconHTML);
                 } else {
-                    postIsLiked = true;
-                    heartIconHTML.name = 'heart-outline';
-                    heartIconHTML.style.color = null;
+                    dislikePost(heartIconHTML);
                 }
             }
             
+            // displays the heart animation in the center of the post, only triggered when liking posts, and not when disliking it
             if(!postIsLiked) {
+                const incrementedNum = String(Number(likesAmount.replaceAll(".",""))+1);
+                const numSize = likesAmount.replaceAll(".","").length;
+
+                setLikesAmount(incrementedNum.slice(0,(Math.floor(numSize/2))) + '.' + incrementedNum.slice(-3));
+
                 postHeart.style.animation = 'postHeartAnimation 0.5s';
                 setTimeout(() => {
                     postHeart.style.animation = null;
                 }, 500);            
+            } else {
+                const decrementedNum = String(Number(likesAmount.replaceAll(".",""))-1);
+                const numSize = likesAmount.replaceAll(".","").length;
+
+                setLikesAmount(decrementedNum.slice(0,(Math.floor(numSize/2))) + '.' + decrementedNum.slice(-3));
             }
         }
 
@@ -78,14 +102,14 @@ export default function Posts() {
 
                 <Topo userImage={props.userImage} userName={props.userName} />
     
-                <div className="conteudo" onDoubleClick={likePost}>
+                <div className="conteudo" onDoubleClick={likeDislikePost}>
                     <img src={props.content} />
                 </div>
     
                 <div className="fundo">
                     <div className="acoes">
                         <div>
-                            <ion-icon name="heart-outline" onClick={likePost}></ion-icon>
+                            <ion-icon name="heart-outline" onClick={likeDislikePost}></ion-icon>
                             <ion-icon name="chatbubble-outline"></ion-icon>
                             <ion-icon name="paper-plane-outline"></ion-icon>
                         </div>
@@ -97,7 +121,7 @@ export default function Posts() {
                     <div className="curtidas">
                         <img src={props.likeImage} />
                         <div className="texto">
-                            Curtido por <strong>{props.likeName}</strong> e <strong>outras {props.likesAmount} pessoas</strong>
+                            Curtido por <strong>{props.likeName}</strong> e <strong>outras {likesAmount} pessoas</strong>
                         </div>
                     </div>
                 </div>
