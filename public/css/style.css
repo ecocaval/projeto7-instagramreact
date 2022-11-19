@@ -149,12 +149,32 @@ body {
   cursor: pointer;
 }
 
+
 .post {
+  position: relative;
   border-radius: 3px;
   border: 1px solid #DBDBDB;
   display: flex;
   flex-direction: column;
   margin-top: 18px;
+}
+
+.postHeart {
+  position: absolute;
+  top: calc(50% - 50px);
+  left: calc(50% - 50px);
+  color: white;
+  font-size: 0px;
+  /* animation: postHeartAnimation 0.5s; */
+}
+
+@keyframes postHeartAnimation {
+  from {
+    font-size: 20px;
+  }
+  to {
+    font-size: 100px;
+  }
 }
 
 .post .topo {
@@ -398,5 +418,9 @@ ion-icon {
 
 .usuario ion-icon {
   margin-left: 5px;
+}
+
+.hidden {
+  display: none;
 }
 

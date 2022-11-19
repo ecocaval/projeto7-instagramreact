@@ -36,21 +36,27 @@ export default function Stories() {
     ]
 
     return(
-        <div class="stories">            
+        <div className="stories">            
             {storiesInfo.map(storie => {
                 return(
-                    <div class="story">
-                        <div class="imagem">
-                            <img src={storie.image}/>
-                        </div>
-                        <div class="usuario">
-                            {storie.userName}  
-                        </div>
-                    </div>
+                    <Story key={storie.userName} image={storie.image} userName={storie.userName}/>
                 )
             })}
-            <div class="setinha">
+            <div className="setinha">
                 <ion-icon name="chevron-forward-circle"></ion-icon>
+            </div>
+        </div>
+    );
+}
+
+function Story(props) {
+    return (
+        <div className="story">
+            <div className="imagem">
+                <img src={props.image} />
+            </div>
+            <div className="usuario">
+                {props.userName}
             </div>
         </div>
     );
