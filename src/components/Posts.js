@@ -43,29 +43,49 @@ export default function Posts() {
             !(bookMark === "bookmark") ? setBookMark("bookmark") : setBookMark("bookmark-outline")
         }
 
-        function displayPostHeart(event) {
-            const postHeart = event.currentTarget.firstChild;
-            postHeart.style.animation = 'postHeartAnimation 0.5s';
-            setTimeout(() => {
-                postHeart.style.animation = null;
-            },500);
+        function likePost(event) {
+            const postHeart = event.currentTarget.offsetParent.firstChild;
+            let postIsLiked = false;
+            
+            if(event.currentTarget.classList.contains('conteudo')) {
+                const heartIconHTML = event.currentTarget.offsetParent.childNodes[3].firstChild.firstChild.firstChild;
+                heartIconHTML.name = 'heart';
+                heartIconHTML.style.color = 'red';
+            } else {
+                const heartIconHTML = event.currentTarget;
+                if(heartIconHTML.name !== 'heart') {
+                    heartIconHTML.name = 'heart';
+                    heartIconHTML.style.color = 'red';
+                } else {
+                    postIsLiked = true;
+                    heartIconHTML.name = 'heart-outline';
+                    heartIconHTML.style.color = null;
+                }
+            }
+            
+            if(!postIsLiked) {
+                postHeart.style.animation = 'postHeartAnimation 0.5s';
+                setTimeout(() => {
+                    postHeart.style.animation = null;
+                }, 500);            
+            }
         }
 
         return (
-            <div className="post" onDoubleClick={displayPostHeart}>
+            <div className="post">
                 {/* heart used in the bonus screen post*/}
                 <ion-icon name="heart" class='postHeart'></ion-icon>
 
                 <Topo userImage={props.userImage} userName={props.userName} />
     
-                <div className="conteudo">
+                <div className="conteudo" onDoubleClick={likePost}>
                     <img src={props.content} />
                 </div>
     
                 <div className="fundo">
                     <div className="acoes">
                         <div>
-                            <ion-icon name="heart-outline"></ion-icon>
+                            <ion-icon name="heart-outline" onClick={likePost}></ion-icon>
                             <ion-icon name="chatbubble-outline"></ion-icon>
                             <ion-icon name="paper-plane-outline"></ion-icon>
                         </div>
@@ -88,7 +108,7 @@ export default function Posts() {
     return (
         <div className="posts">
             {postsInfo.map((post,index) => <Post key={index} userImage={post.userImage} userName={post.userName} content={post.content}
-                                           likeImage={post.likeImage} likeName={post.likeName} likesAmount={post.likesAmount} />)}
+                                                 likeImage={post.likeImage} likeName={post.likeName} likesAmount={post.likesAmount} />)}
         </div>
     );
 }
