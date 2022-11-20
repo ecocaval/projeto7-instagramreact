@@ -48,7 +48,8 @@ export default function Posts() {
 
             const postHeart = event.currentTarget.offsetParent.firstChild;
             
-            let postIsLiked = false;
+            let heartIconHTML;
+            let postIsAlreadyLiked = false;
 
             // changes the post heart burtton to filled and red
             const likePost = (heartIcon) => {
@@ -63,13 +64,18 @@ export default function Posts() {
             
             // case #1 - like triggered through post image
             if(event.currentTarget.classList.contains('conteudo')) {
-                const heartIconHTML = event.currentTarget.offsetParent.childNodes[3].firstChild.firstChild.firstChild;
+                heartIconHTML = event.currentTarget.offsetParent.childNodes[3].firstChild.firstChild.firstChild;
+                if(heartIconHTML.name === 'heart') {
+                    postIsAlreadyLiked = true;
+                }
                 likePost(heartIconHTML);
             } else {
             // case #2 - like triggered through like button                
-                const heartIconHTML = event.currentTarget;
-                postIsLiked = heartIconHTML.name === 'heart';
-                if(!postIsLiked) {
+                heartIconHTML = event.currentTarget;
+                if(!(heartIconHTML.name === 'heart')) {
+                    if(heartIconHTML.name === 'heart') {
+                        postIsAlreadyLiked = true;
+                    }
                     likePost(heartIconHTML);
                 } else {
                     dislikePost(heartIconHTML);
@@ -77,11 +83,13 @@ export default function Posts() {
             }
             
             // displays the heart animation in the center of the post, only triggered when liking posts, and not when disliking it
-            if(!postIsLiked) {
+            if(heartIconHTML.name === 'heart') {
                 const incrementedNum = String(Number(likesAmount.replaceAll(".",""))+1);
                 const numSize = likesAmount.replaceAll(".","").length;
-
-                setLikesAmount(incrementedNum.slice(0,(Math.floor(numSize/2))) + '.' + incrementedNum.slice(-3));
+            
+                if(!postIsAlreadyLiked) {
+                    setLikesAmount(incrementedNum.slice(0,(Math.floor(numSize/2))) + '.' + incrementedNum.slice(-3));
+                }
 
                 postHeart.style.animation = 'postHeartAnimation 0.5s';
                 setTimeout(() => {
