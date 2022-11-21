@@ -165,7 +165,6 @@ body {
   left: calc(50% - 50px);
   color: white;
   font-size: 0px;
-  /* animation: postHeartAnimation 0.5s; */
 }
 
 @keyframes postHeartAnimation {

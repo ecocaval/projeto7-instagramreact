@@ -40,6 +40,16 @@ export default function Posts() {
         const [likesAmount, setLikesAmount] = React.useState(props.likesAmount);
         const [bookMark, setBookMark] = React.useState("bookmark-outline");
 
+        function likePost(heartIcon) {
+            heartIcon.name = 'heart';
+            heartIcon.style.color = 'red';
+        }
+
+        function dislikePost(heartIcon) {
+            heartIcon.name = 'heart-outline';
+            heartIcon.style.color = null;
+        }
+
         function changeBookMark(bookMark) {
             !(bookMark === "bookmark") ? setBookMark("bookmark") : setBookMark("bookmark-outline")
         }
@@ -50,36 +60,16 @@ export default function Posts() {
             
             let heartIconHTML;
             let postIsAlreadyLiked = false;
-
-            // changes the post heart burtton to filled and red
-            const likePost = (heartIcon) => {
-                heartIcon.name = 'heart';
-                heartIcon.style.color = 'red';
-            }
-            // changes the post heart burtton to unfilled and black
-            const dislikePost = (heartIcon) => {
-                heartIcon.name = 'heart-outline';
-                heartIcon.style.color = null;
-            }
             
             // case #1 - like triggered through post image
             if(event.currentTarget.classList.contains('conteudo')) {
                 heartIconHTML = event.currentTarget.offsetParent.childNodes[3].firstChild.firstChild.firstChild;
-                if(heartIconHTML.name === 'heart') {
-                    postIsAlreadyLiked = true;
-                }
+                (heartIconHTML.name === 'heart') ? (postIsAlreadyLiked = true) : (postIsAlreadyLiked = false);
                 likePost(heartIconHTML);
             } else {
             // case #2 - like triggered through like button                
                 heartIconHTML = event.currentTarget;
-                if(!(heartIconHTML.name === 'heart')) {
-                    if(heartIconHTML.name === 'heart') {
-                        postIsAlreadyLiked = true;
-                    }
-                    likePost(heartIconHTML);
-                } else {
-                    dislikePost(heartIconHTML);
-                }
+                !(heartIconHTML.name === 'heart') ? likePost(heartIconHTML) : dislikePost(heartIconHTML)
             }
             
             // displays the heart animation in the center of the post, only triggered when liking posts, and not when disliking it
@@ -88,9 +78,8 @@ export default function Posts() {
                 const numSize = likesAmount.replaceAll(".","").length;
             
                 if(!postIsAlreadyLiked) {
-                    setLikesAmount(incrementedNum.slice(0,(Math.floor(numSize/2))) + '.' + incrementedNum.slice(-3));
-                }
-
+                    setLikesAmount(incrementedNum.slice(0,(Math.floor(numSize/2))) + '.' + incrementedNum.slice(-3)) ;
+                } 
                 postHeart.style.animation = 'postHeartAnimation 0.5s';
                 setTimeout(() => {
                     postHeart.style.animation = null;
@@ -104,32 +93,32 @@ export default function Posts() {
         }
 
         return (
-            <div className="post">
+            <div className="post" data-test="post">
                 {/* heart used in the bonus screen post*/}
                 <ion-icon name="heart" class='postHeart'></ion-icon>
 
                 <Topo userImage={props.userImage} userName={props.userName} />
     
                 <div className="conteudo" onDoubleClick={likeDislikePost}>
-                    <img src={props.content} />
+                    <img src={props.content} data-test="post-image"/>
                 </div>
     
                 <div className="fundo">
                     <div className="acoes">
                         <div>
-                            <ion-icon name="heart-outline" onClick={likeDislikePost}></ion-icon>
+                            <ion-icon name="heart-outline" onClick={likeDislikePost} data-test="like-post"></ion-icon>
                             <ion-icon name="chatbubble-outline"></ion-icon>
                             <ion-icon name="paper-plane-outline"></ion-icon>
                         </div>
                         <div>
-                            <ion-icon name={bookMark} onClick={() => changeBookMark(bookMark)}></ion-icon>
+                            <ion-icon name={bookMark} onClick={() => changeBookMark(bookMark)} data-test="save-post"></ion-icon>
                         </div>
-                    </div>
+                </div>
     
                     <div className="curtidas">
                         <img src={props.likeImage} />
                         <div className="texto">
-                            Curtido por <strong>{props.likeName}</strong> e <strong>outras {likesAmount} pessoas</strong>
+                            Curtido por <strong>{props.likeName}</strong> e <strong>outras <span data-test="likes-number">{likesAmount}</span> pessoas</strong>
                         </div>
                     </div>
                 </div>
